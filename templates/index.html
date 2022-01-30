@@ -1,0 +1,8 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ data.titulo }}{% endblock %}
+
+{% block body%}
+<canvas id="canv" width="500" height="700">Reinicia La Pagina</canvas>
+<script src="{{ url_for('static', filename='js/matrix.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block title %}Detector de Rostro{% endblock %}
+
+{% block body%}
+<style>
+    .container{
+        padding:0;
+        width: 100%;
+        height:100vh;
+        background-color: bisque;
+        color: black;
+        text-align: center;
+    }
+    </style>
+<body class ="container">
+    <h1>Detector de Rostro y emociones</h1>
+    <img src="{{ url_for('video_feed') }}">
+</body>
+<div class="d-grid gap-2 col-2 mx-auto">
+    <button id="btnTomarFotoServidor" class="button is-info mb-2">Tomar y guardar en servidor</button>
+    <div class="notification is-primary mt-2" id="estado">Aquí aparecerá la información</div>
+</div>
+<script type="text/javascript">
+    /*
+    En el clic del botón hacemos una petición a /tomar_foto_guardar 
+    */
+    const $btnTomarFotoServidor = document.querySelector("#btnTomarFotoServidor"),
+        $estado = document.querySelector("#estado");
+    $btnTomarFotoServidor.onclick = async () => {
+        $estado.textContent = "Tomando foto...";
+        const respuestaRaw = await fetch("/tomar_foto_guardar");
+        const respuesta = await respuestaRaw.json();
+        let mensaje = "";
+        if (respuesta.ok) {
+            mensaje = `Foto guardada como ${respuesta.nombre_foto}`;
+            setTimeout( function() { window.location.href = "{{url_for('Analisis')}}"; }, 500 );
+        } else {
+            mensaje = `Error tomando foto`;
+        }
+        $estado.textContent = mensaje;
+    };
+</script>
+{% endblock %}
